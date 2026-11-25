@@ -1,0 +1,147 @@
+local coreGui = game:GetService("CoreGui")
+local players = game:GetService("Players")
+
+task.spawn(function()
+    local v1, v2 = pcall(function()
+        
+    end)
+    if not v1 then
+        warn("Error al cargar JUAM_HUD: " .. tostring(v2))
+    end
+end)
+
+local localPlayer = players.LocalPlayer
+if coreGui:FindFirstChild("JuamHudGUI") then
+    coreGui.JuamHudGUI:Destroy()
+end
+
+local juamHudGUI = Instance.new("ScreenGui")
+juamHudGUI.Name = "JuamHudGUI"
+juamHudGUI.ResetOnSpawn = false
+pcall(function() juamHudGUI.Parent = coreGui end)
+if not juamHudGUI.Parent then
+    juamHudGUI.Parent = localPlayer:WaitForChild("PlayerGui")
+end
+
+local toggleButton = Instance.new("TextButton")
+toggleButton.Name = "ToggleButton"
+toggleButton.Size = UDim2.new(0, 55, 0, 55)
+toggleButton.Position = UDim2.new(0, 20, 0, 100)
+toggleButton.BackgroundColor3 = Color3.fromRGB(200, 30, 30)
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.TextSize = 14
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.Text = "JUAM"
+toggleButton.Parent = juamHudGUI
+
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 14)
+uiCorner.Parent = toggleButton
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 320, 0, 320)
+mainFrame.Position = UDim2.new(0.5, -160, 0.5, -160)
+mainFrame.BackgroundColor3 = Color3.fromRGB(45, 12, 12)
+mainFrame.BorderSizePixel = 0
+mainFrame.Visible = true
+mainFrame.Parent = juamHudGUI
+
+local uiCorner2 = Instance.new("UICorner")
+uiCorner2.CornerRadius = UDim.new(0, 16)
+uiCorner2.Parent = mainFrame
+
+local textLabel = Instance.new("TextLabel")
+textLabel.Size = UDim2.new(1, 0, 0, 50)
+textLabel.BackgroundTransparency = 1
+textLabel.Text = "JUAM_HUD"
+textLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+textLabel.TextSize = 20
+textLabel.Font = Enum.Font.GothamBold
+textLabel.Parent = mainFrame
+
+local scrollingFrame = Instance.new("ScrollingFrame")
+scrollingFrame.Size = UDim2.new(1, -20, 1, -65)
+scrollingFrame.Position = UDim2.new(0, 10, 0, 55)
+scrollingFrame.BackgroundTransparency = 1
+scrollingFrame.BorderSizePixel = 0
+scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 280)
+scrollingFrame.ScrollBarThickness = 4
+scrollingFrame.Parent = mainFrame
+
+local uiListLayout = Instance.new("UIListLayout")
+uiListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+uiListLayout.Padding = UDim.new(0, 12)
+uiListLayout.Parent = scrollingFrame
+
+local function f1(p1, p2, layoutOrder)
+    local textButton = Instance.new("TextButton")
+    textButton.Name = p1 .. "Btn"
+    textButton.Size = UDim2.new(1, -10, 0, 52)
+    textButton.BackgroundColor3 = Color3.fromRGB(150, 25, 25)
+    textButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textButton.TextSize = 15
+    textButton.Font = Enum.Font.GothamSemibold
+    textButton.Text = p1
+    textButton.LayoutOrder = layoutOrder
+    textButton.Parent = scrollingFrame
+
+    local uiCorner3 = Instance.new("UICorner")
+    uiCorner3.CornerRadius = UDim.new(0, 10)
+    uiCorner3.Parent = textButton
+
+    textButton.MouseButton1Click:Connect(function()
+        pcall(function() loadstring(game:HttpGet(p2))() end)
+    end)
+end
+
+f1(
+    "AI Riddle Code",
+    "https://raw.githubusercontent.com/nicebonicely-hue/TRADESSABHUB/refs/heads/main/airiddlecode.lua",
+    1
+)
+
+f1(
+    "FPS Booster God-Mode",
+    "https://raw.githubusercontent.com/nicebonicely-hue/TRADESSABHUB/refs/heads/main/fpsbooster.lua",
+    2
+)
+
+local discordButton = Instance.new("TextButton")
+discordButton.Name = "DiscordBtn"
+discordButton.Size = UDim2.new(1, -10, 0, 52)
+discordButton.BackgroundColor3 = Color3.fromRGB(220, 40, 40)
+discordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+discordButton.TextSize = 15
+discordButton.Font = Enum.Font.GothamSemibold
+discordButton.Text = "Join Discord"
+discordButton.LayoutOrder = 3
+discordButton.Parent = scrollingFrame
+
+local uiCornerDiscord = Instance.new("UICorner")
+uiCornerDiscord.CornerRadius = UDim.new(0, 10)
+uiCornerDiscord.Parent = discordButton
+
+discordButton.MouseButton1Click:Connect(function()
+    local discordUrl = "https://discord.gg/NBzQQ5BVw"
+    pcall(function()
+        if setclipboard then
+            setclipboard(discordUrl)
+        elseif toclipboard then
+            toclipboard(discordUrl)
+        end
+    end)
+    pcall(function()
+        game:GetService("GuiService"):OpenUrl(discordUrl)
+    end)
+    discordButton.Text = "Opening Discord..."
+    task.wait(1.5)
+    discordButton.Text = "Join Discord"
+end)
+
+local v3 = true
+toggleButton.MouseButton1Click:Connect(function()
+    v3 = not v3
+    mainFrame.Visible = v3
+end)
